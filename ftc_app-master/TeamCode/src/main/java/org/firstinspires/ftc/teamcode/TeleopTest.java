@@ -3,29 +3,23 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Hardware;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="TeleOpTest", group="Iterative Opmode")
-public class TeleopTest extends OpMode{
-    RobotPreferences prefs;
-    HardwareMap hardwareMap;
-    DcMotor leftMotor = null;
-    DcMotor rightMotor = null;
+public class TeleopTest extends OpMode {
 
-
-
+    DcMotor leftMotor;
+    DcMotor rightMotor;
 
     @Override
     public void init() {
-        leftMotor = hardwareMap.get(DcMotor.class, prefs.motor1);
-        rightMotor = hardwareMap.get(DcMotor.class, prefs.motor2);
+        leftMotor = hardwareMap.get(DcMotor.class, RobotPreferences.motor1);
+        rightMotor = hardwareMap.get(DcMotor.class, RobotPreferences.motor2);
     }
 
     @Override
     public void loop(){
-         arcadeDrive(-gamepad1.left_stick_y,gamepad1.right_stick_y);
+         arcadeDrive(-gamepad1.right_stick_x, gamepad1.left_stick_y);
 
     }
 
@@ -36,6 +30,4 @@ public class TeleopTest extends OpMode{
         rightMotor.setPower(rightPower);
 
     }
-
-
 }
