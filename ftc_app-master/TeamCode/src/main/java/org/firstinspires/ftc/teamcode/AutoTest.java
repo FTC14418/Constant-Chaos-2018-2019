@@ -27,6 +27,7 @@ public class AutoTest extends LinearOpMode{
 
         waitForStart();
 
+//        Motors Will never stop
         while(distanceSensor1.getDistance(DistanceUnit.INCH)<5.0){
             leftMotor.setPower(0.5);
             rightMotor.setPower(-0.5);

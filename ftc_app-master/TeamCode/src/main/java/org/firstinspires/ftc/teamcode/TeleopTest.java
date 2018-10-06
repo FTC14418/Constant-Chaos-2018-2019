@@ -8,13 +8,17 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="TeleOpTest", group="Iterative Opmode")
 public class TeleopTest extends OpMode {
 
-    DcMotor leftMotor;
-    DcMotor rightMotor;
+    DcMotor leftFrontMotor;
+    DcMotor leftBackMotor;
+    DcMotor rightFrontMotor;
+    DcMotor rightBackMotor;
 
     @Override
     public void init() {
-        leftMotor = hardwareMap.get(DcMotor.class, RobotPreferences.motor1);
-        rightMotor = hardwareMap.get(DcMotor.class, RobotPreferences.motor2);
+        leftFrontMotor = hardwareMap.get(DcMotor.class, RobotPreferences.motor1);
+        leftBackMotor = hardwareMap.get(DcMotor.class, RobotPreferences.motor2);
+        rightFrontMotor = hardwareMap.get(DcMotor.class, RobotPreferences.motor3);
+        rightBackMotor = hardwareMap.get(DcMotor.class, RobotPreferences.motor4);
     }
 
     @Override
@@ -22,12 +26,14 @@ public class TeleopTest extends OpMode {
          arcadeDrive(-gamepad1.right_stick_x, gamepad1.left_stick_y);
 
     }
-
     public void arcadeDrive(double drive , double turn){
         double leftPower = Range.clip(drive + turn, -1.0, 1.0 );
         double rightPower = Range.clip(drive-turn,-1.0, 1.0);
-        leftMotor.setPower(leftPower);
-        rightMotor.setPower(rightPower);
+        leftFrontMotor.setPower(leftPower);
+        leftBackMotor.setPower(leftPower);
+
+        rightFrontMotor.setPower(rightPower);
+        rightBackMotor.setPower(rightPower);
 
     }
 }
