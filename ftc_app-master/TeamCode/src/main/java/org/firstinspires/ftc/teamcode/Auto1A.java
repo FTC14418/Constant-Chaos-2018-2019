@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Auto1A", group="Color1")
+
+@Autonomous(name="Auto1A", group="Linear Opmode")
 
 public class Auto1A extends LinearOpMode{
     DcMotor motor1, motor2, motor3,motor4;
@@ -14,9 +14,9 @@ public class Auto1A extends LinearOpMode{
     double gearReduction = (25 / 15);
     double wheelSize = 3.543;
     double wheelCircumference = wheelSize * Math.PI;
-    double distancePerPulse = wheelCircumference / (encoderCount * gearReduction);
-    double pulsePerInch = 335;
-    private ElapsedTime runtime = new ElapsedTime();
+    double distancePerPulse;
+    double pulsePerInch = 75;
+    int tempVal;
     @Override
     public void runOpMode() throws InterruptedException {
         motor1 = hardwareMap.get(DcMotor.class, RobotPreferences.motor1);
@@ -34,42 +34,64 @@ public class Auto1A extends LinearOpMode{
         motor3.setDirection(DcMotorSimple.Direction.REVERSE);
         motor4.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
-        encoderDrive(0.5, 5, 5, 5);
+        telemetry.addData("Running: ", "Running at %7d: %7d", motor1.getCurrentPosition(), motor3.getCurrentPosition());
+        telemetry.update();
+
+        encoderDrive(5.0, 1.0);
+
     }
 
-    public void encoderDrive(double speed, double leftInches, double rightInches, double timeout) {
-        int newLeftTarget1, newLeftTarget2;
-        int newRightTarget1, newRightTarget2;
-        if (opModeIsActive()) {
-            newLeftTarget1 = motor1.getCurrentPosition() + (int)(leftInches * pulsePerInch);
-            newLeftTarget2 = motor2.getCurrentPosition() + (int)(leftInches * pulsePerInch);
-            newRightTarget1 = motor3.getCurrentPosition() + (int)(leftInches * pulsePerInch);
-            newRightTarget2 = motor4.getCurrentPosition() + (int)(leftInches * pulsePerInch);
-            motor1.setTargetPosition(newLeftTarget1);
-            motor2.setTargetPosition(newLeftTarget2);
-            motor3.setTargetPosition(newRightTarget1);
-            motor4.setTargetPosition(newRightTarget2);
-            motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            runtime.reset();
-            motor1.setPower(speed);
-            motor2.setPower(speed);
-            motor3.setPower(speed);
-            motor4.setPower(speed);
-            while (opModeIsActive() && runtime.seconds() < timeout && motor1.isBusy() && motor3.isBusy()) {
-                telemetry.addData("Running: ", "Running at %7d: %7d", motor1.getCurrentPosition(), motor3.getCurrentPosition());
-                telemetry.update();
-            }
-        }
-        motor1.setPower(0);
-        motor2.setPower(0);
-        motor3.setPower(0);
-        motor4.setPower(0);
+    public void encoderDrive(double distance, double power){
+        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        tempVal = (int) (distance * pulsePerInch);
+        distancePerPulse = wheelCircumference / (tempVal * gearReduction);
+        telemetry.addData("Pulses", tempVal);
+        motor1.setTargetPosition((int)(distancePerPulse));
+        motor2.setTargetPosition((int)(distancePerPulse));
+        motor3.setTargetPosition((int)(distancePerPulse));
+        motor4.setTargetPosition((int)(distancePerPulse));
+        motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor1.setPower(power);
+        motor2.setPower(power);
+        motor3.setPower(power);
+        motor4.setPower(power);
     }
+
+//    public void motorEncoderModeSet(){
+//        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        motor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        motor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        motor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//    }
+
+//    public void setDistanceStraight(int pulse){
+//        motor1.setTargetPosition(pulse);
+//        motor2.setTargetPosition(pulse);
+//        motor3.setTargetPosition(pulse);
+//        motor4.setTargetPosition(pulse);
+//    }
+
+//    public void runToPosition(){
+//        motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//    }
+
+
+
 }
