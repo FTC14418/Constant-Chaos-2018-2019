@@ -42,7 +42,6 @@ public class TeleopTest extends OpMode {
         double rightPower = Range.clip(drive-turn,-1.0, 1.0);
         leftFrontMotor.setPower(leftPower);
         leftBackMotor.setPower(leftPower);
-
         rightFrontMotor.setPower(rightPower);
         rightBackMotor.setPower(rightPower);
 
