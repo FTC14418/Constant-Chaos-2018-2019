@@ -109,14 +109,13 @@ public class Auto1 extends LinearOpMode{
             motor3.setPower(speed);
         }
 
-//    public void encoderDriveAccelerometer(double speed, double time){
-//        autotime.reset();
-//        autotime.startTimeNanoseconds();
-//        while(accelUnit > imu.getAcceleration()){
-//            if (time == autotime.time()) {
-//                accelUnit = imu.getAcceleration();
-//            }
-//        }
-//
-//    }
+    public void encoderDriveAccelerometer(double speed, double time){
+        autotime.reset();
+ imu.getAcceleration()){
+             (time == autotime.time()) {
+                accelUnit = imu.getAcceleration();
+            }
+        }
+
+    }
 }
